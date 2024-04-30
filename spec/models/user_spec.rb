@@ -23,10 +23,9 @@ RSpec.describe User, type: :model do
       create(:user_review, reviewee: user, reviewer: users[3], score: 3)
     end
 
-    average_scores = UserReview.group(:reviewee_id).select(:reviewee_id, Arel.sql("AVG(score) average_score"))
-    reviews_count = UserReview.group(:reviewee_id).select(:reviewee_id, Arel.sql("COUNT(*) reviews_count"))
-    user_reviews_count = UserReview.group(:reviewer_id).select(:reviewer_id, Arel.sql("COUNT(*) user_reviews_count"))
-
+    average_scores = UserReview.average_scores
+    reviews_count = UserReview.reviews_counts
+    user_reviews_count = UserReview.user_reviews_counts
     users_with_average_score = User.with(average_scores:, reviews_count:, user_reviews_count:)
       .joins("LEFT OUTER JOIN average_scores ON users.id = average_scores.reviewee_id")
       .joins("LEFT OUTER JOIN reviews_count ON users.id = reviews_count.reviewee_id")

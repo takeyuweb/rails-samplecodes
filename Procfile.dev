@@ -1,0 +1,1 @@
+web: rdbg --open --nonstop bin/rails -- server
